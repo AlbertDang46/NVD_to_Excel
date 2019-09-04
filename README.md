@@ -11,3 +11,4 @@ In the terminal or command line, navigate to the `NVD-to-Excel` folder and execu
 
 The program should produce an Excel sheet containing all the CVEs in the NVD JSON file in the `vul_excel_sheets` folder. This Excel sheet containing the vulnerabilities of one year should be used with the `VULNERABILITY_MAPPING_TOOL` Excel tool. The program takes only a couple seconds to run, but adding the `--log` argument can extend runtime to a couple minutes.
 
+The `vulnerabilities` folder and the `vul_excel_sheets` folder already come with the NVD JSON file and the Excel file for 2019 as an example.
