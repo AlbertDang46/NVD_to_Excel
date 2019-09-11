@@ -57,7 +57,7 @@ function createNVDExcelSheet() {
         let vulnerabilitiesJSON = JSON.parse(data);
 
         vulnerabilitiesJSON.CVE_Items.forEach((item) => {
-            let cve_id = "";       
+            let cve_id = item.cve.CVE_data_meta.ID;       
             let vector_string = "";
             let attack_vector = "";
             let attack_complexity = "";
@@ -75,7 +75,22 @@ function createNVDExcelSheet() {
             let product_name = "";
             let versions = [];
 
-            cve_id = item.cve.CVE_data_meta.ID; 
+            let vendor_data = item.cve.affects.vendor.vendor_data;
+            if(vendor_data.length)
+            {
+                vendor_name = vendor_data[0].vendor_name.replace(/_/g, " ");
+                product_name = vendor_data[0].product.product_data[0].product_name.replace(/_/g, " ");
+                versions = vendor_data[0].product.product_data[0].version.version_data.map((v_num) => {
+                    if(v_num.version_value.localeCompare("*") == 0 || v_num.version_value.localeCompare("-") == 0) {
+                        return "";
+                    }
+                    return v_num.version_value;
+                });
+            }
+            else
+            {
+                return;
+            }
 
             if(item.impact.hasOwnProperty("baseMetricV3"))
             {
@@ -94,19 +109,6 @@ function createNVDExcelSheet() {
                 base_severity = cvssV3.baseSeverity;
                 exploitability_score = item.impact.baseMetricV3.exploitabilityScore;
                 impact_score = item.impact.baseMetricV3.impactScore;
-            }
-
-            let vendor_data = item.cve.affects.vendor.vendor_data;
-            if(vendor_data.length)
-            {
-                vendor_name = vendor_data[0].vendor_name.replace(/_/g, " ");
-                product_name = vendor_data[0].product.product_data[0].product_name.replace(/_/g, " ");
-                versions = vendor_data[0].product.product_data[0].version.version_data.map((v_num) => {
-                    if(v_num.version_value.localeCompare("*") == 0 || v_num.version_value.localeCompare("-") == 0) {
-                        return "";
-                    }
-                    return v_num.version_value;
-                });
             }
             
             if(process.argv[3] === "--log")
