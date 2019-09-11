@@ -11,6 +11,16 @@ const ZIP_FOLDER = "./vulnerabilities_zip"
 const JSON_FOLDER = "./vulnerabilities_json";
 const EXCEL_FOLDER = "./vulnerabilities_excel_sheets";
 
+if (!fs.existsSync(ZIP_FOLDER)) { 
+    fs.mkdirSync(ZIP_FOLDER);
+}
+if (!fs.existsSync(JSON_FOLDER)) { 
+    fs.mkdirSync(JSON_FOLDER);
+}
+if (!fs.existsSync(EXCEL_FOLDER)) { 
+    fs.mkdirSync(EXCEL_FOLDER);
+}
+
 let nvdYear = process.argv[2];
 let nvdFileName = "nvdcve-1.0-" + nvdYear;
 let nvdJSONName = nvdFileName + ".json";
