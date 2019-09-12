@@ -7,6 +7,8 @@ const https = require("https");
 const unzip = require("unzip");
 const excel = require("exceljs/modern.nodejs");
 
+const PROTECT_PASS = "nvdprotect";
+
 const ZIP_FOLDER = "./vulnerabilities_zip"
 const JSON_FOLDER = "./vulnerabilities_json";
 const EXCEL_FOLDER = "./vulnerabilities_excel_sheets";
@@ -36,13 +38,20 @@ if(nvdYear === undefined) {
     process.exit(1);
 }
 
-const zipFile = fs.createWriteStream(zipFilepath);
 https.get(nvdZipURL, function(response) {
+    if(response.statusCode !== 200) {
+        console.log("This NVD year is currently unvailable! Check available years at https://nvd.nist.gov/vuln/data-feeds#JSON_FEED");
+        process.exit(1);
+    }
+
+    let zipFile = fs.createWriteStream(zipFilepath);
     response.pipe(zipFile).on("finish", function() {
         fs.createReadStream(zipFilepath).pipe(unzip.Extract({ path: JSON_FOLDER }).on("close", function() {
             createNVDExcelSheet();
         }));
     });
+}).on("error", function(error) {
+    console.error(error);
 });
 
 function createNVDExcelSheet() {
@@ -142,6 +151,7 @@ function createNVDExcelSheet() {
                             exploitability_score, impact_score, vendor_name, product_name, ...versions]);
         });
 
+        worksheet.protect(PROTECT_PASS);
         workbook.xlsx.writeFile(excelFilepath);
     });
 }

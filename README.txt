@@ -6,7 +6,7 @@ Use the terminal or command line to run `npm install` within the `NVD-to-Excel` 
 Then run `npm install exceljs` to add the exceljs package to the project. 
 Lastly, run `npm install unzip` to add an unzipper to the project.
 
-In the terminal or command line, navigate to the `NVD-to-Excel` folder and run `node NVDToExcel.js [year]`. Replace `[year]` with the year you would like to get NVD CVEs from. The argument `--log` can be added after `[year]` to output console logs within the terminal, but the program will take longer to run if logs are outputted.
+In the terminal or command line, navigate to the `NVD-to-Excel` folder and run `node NVDToExcel.js [year]`. Replace `[year]` with the year you would like to get NVD CVEs from. The argument `--log` can be added after `[year]` to output console logs within the terminal, but the program will take longer to run if logs are outputted. If an unavailable year is entered, the tool will exit and an error message will be console logged. Available years can be found at https://nvd.nist.gov/vuln/data-feeds#JSON_FEED.
 
 The program should output a zip file in the `vulnerabilities_zip` folder, JSON file in the `vulnerabilities_json` folder, and Excel sheet containing all the NVD CVEs from the specified year in the `vulnerabilities_excel_sheets` folder. 
 This Excel sheet containing the vulnerabilities should be used with the `VULNERABILITY_MAPPING_TOOL` Excel tool. 
